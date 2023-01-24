@@ -23,7 +23,6 @@ public class Measurement implements Comparable<Measurement>{
         this.time=time;
         this.conf=conf;
         this.rate=rate;
-        
     }
 	
 	/**
@@ -32,7 +31,6 @@ public class Measurement implements Comparable<Measurement>{
 	public Measurement(LocalDateTime time, double conf) {
         this.time=time;
         this.conf=conf;
-        
     }
 	
 	/**
