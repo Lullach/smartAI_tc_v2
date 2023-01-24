@@ -8,13 +8,7 @@ import ij.measure.Measurements;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.Analyzer;
 import ij.plugin.filter.BackgroundSubtracter;
-import ij.plugin.filter.RankFilters;
-import ij.process.AutoThresholder;
 import ij.process.ImageProcessor;
-
-
-import static ij.plugin.filter.RankFilters.MEDIAN;
-import static ij.process.ImageProcessor.*;
 
 
 
@@ -23,7 +17,6 @@ public class ImageJClass {
 	
 	
 	// returns the respective Measurement object associated with the input picture
-	// You still need to close all the windows 
 	public Measurement analyze(String filepath,LocalDateTime time) {
 		// Open picture as 8-bit
 		Opener opener = new Opener();
@@ -40,9 +33,8 @@ public class ImageJClass {
 		Analyzer analyzer = new Analyzer(picAnalyze, Measurements.AREA_FRACTION, resultsTable);
 		analyzer.measure();
 
-		
-		Measurement measure= new Measurement(resultsTable.getColumn(resultsTable.getLastColumn())[0], time);
-		return measure;
+
+		return new Measurement(resultsTable.getColumn(resultsTable.getLastColumn())[0], time);
 
 	}
 	

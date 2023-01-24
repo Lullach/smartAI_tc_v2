@@ -19,7 +19,7 @@
                   <TableColumn fx:id="action" prefWidth="68.0" text="Action" />
               </columns>
             </TableView>
-            <Text layoutX="20.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add at least three pictures of your cell culture:" />
+            <Text layoutX="20.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add three pictures of your cell culture and start the estimation:" />
          </children>
       </AnchorPane>
       <Button fx:id="addButton" layoutX="393.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#openDialogPane" prefHeight="25.0" prefWidth="96.0" style="-fx-border-color: #5c6b51; -fx-background-color: white; -fx-text-fill: #5c6b51;" text="Add">

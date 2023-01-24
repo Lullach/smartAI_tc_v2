@@ -19,26 +19,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
-import calc.GrowthContainer;
-
-/** What I have(nt) done so far:
- * upon saving an image, it will be analyzed by imageJ and the time+confluency = measurement will be added to the GrowthContainer
- * the container itself also has a GrowthPhase (see enum) and the current growth rate, 
- * both of which are updated after you add a new measurement. 
- * Additionally there is a constant threshhold parameter, which is used as a threshold between phases.
- * We definetely need to calculate& update that threshhold, right now its just a magic number
- * Very important: 	1. The GrowthContainer has all the measurements, so you can build graphs, tables,... based on that
- * 					2. You can use beans to update the list of all measurements,... the container already implmements PropertyChangeListener
-
-**/
-
 
 /**
  * JavaFX App
@@ -46,27 +29,33 @@ import calc.GrowthContainer;
 public class App extends Application {
 
 	// once you start the app this process should also start
-	
-    private static Scene scene;
 
+    /**
+     *
+     * @param stage primary stage to load in components
+     * @throws IOException exception thrown if loadFXML() fals
+     */
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("frame"));
+        Scene scene = new Scene(loadFrame());
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
     }
 
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+    /**
+     * @return loaded fxml file
+     * @throws IOException throws exception in case of error on load
+     */
+    private static Parent loadFrame() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("frame.fxml"));
         return fxmlLoader.load();
     }
-
-
+    /**
+    * Main Programm
+    **/
     public static void main(String[] args) {
 		launch();
-
 	}
 	
 

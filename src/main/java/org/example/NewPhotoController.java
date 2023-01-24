@@ -1,18 +1,10 @@
 package org.example;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -22,10 +14,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class NewPhotoController {
+    /**
+     * Dialog is opened when user clicks add in the input values site
+     * allows upload of photos
+     */
 
     private File file;
-
-    private ComboBox comboBox;
 
     @FXML
     private ImageView fotodepictor;
@@ -39,9 +33,12 @@ public class NewPhotoController {
     @FXML
     private InputValuesController ivc;
 
-
+    /**
+     * opens local storage
+     * displays the foto and filename on screen
+     */
     @FXML
-    void selectFile(ActionEvent event) {
+    void selectFile() {
         Stage stage = new Stage();
         FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
         FileChooser fc = new FileChooser();
@@ -53,8 +50,14 @@ public class NewPhotoController {
             fileNamePanel.setTextFill(Color.color(0,0,0));
         }
     }
+
+    /**
+     * When user clicks the save button
+     * checks if all fields are filled with value
+     * if yes, closes stage
+     */
     @FXML
-    void save(MouseEvent event) {
+    void save() {
         String time = timeInput.getText();
         if(time == null || fileNamePanel.getText().isEmpty() || file == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -69,16 +72,24 @@ public class NewPhotoController {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Date must be in format dd-MM-yyyy HH:mm");
                 alert.show();
-                return;
             }
         }
 
     }
+
+    /**
+     * closes dialog without adding anything to table
+     */
     @FXML
-    void discard(MouseEvent event) {
+    void discard() {
         InputValuesController.discardNewPhotoDialog();
     }
 
+    /**
+     * When loaded inputvaluescontroller is set
+     * can be used to call methods in the class
+     * @param controller inputvaluescontroller class
+     */
    public void setInputValuesController(InputValuesController controller) {
         ivc = controller;
     }

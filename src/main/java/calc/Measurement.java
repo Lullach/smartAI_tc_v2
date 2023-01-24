@@ -11,37 +11,15 @@ import java.time.format.DateTimeFormatter;
  */
 public class Measurement implements Comparable<Measurement>{
 	
-	private LocalDateTime time;
-	private double conf;
-	private double rate = 0;	//GrowthContainer ALSO HAS A RATE! We probably dont need this
-	
-	
-	/**
-	 * use for after you have reached log phase and input the current growth rate
-	 */
-	public Measurement(LocalDateTime time, double conf, double rate) {
-        this.time=time;
-        this.conf=conf;
-        this.rate=rate;
-    }
-	
-	/**
-	 * default constructor
-	 */
-	public Measurement(LocalDateTime time, double conf) {
+	private final LocalDateTime time;
+	private final double conf;
+
+    public Measurement(double conf, LocalDateTime time) {
         this.time=time;
         this.conf=conf;
     }
-	
-	/**
-	 * same as above but with time=LocalDateTime.now()
-	 */
-	public Measurement(double conf) { 
-        this.time=LocalDateTime.now();
-        this.conf=conf;
-    }
-	
-	/**Calculates the growth rate by measuring the slope between DataPoints m1,m2 in % per second
+
+    /**Calculates the growth rate by measuring the slope between DataPoints m1,m2 in % per second
 	 * 
 	 * @param m1 1st measurement
 	 * @param m2 2nd measurement, i.e. has to be later
@@ -60,38 +38,16 @@ public class Measurement implements Comparable<Measurement>{
     	return (Math.log(C2-C1)/(duration.toSeconds()));
 		//here we have confluency / Seconds
     }
-	
-	public Measurement(double conf, LocalDateTime time) {
-        this.time=time;
-        this.conf=conf;
-    }
-	
     public LocalDateTime getTime() {
         return time;
     }
     
     public String getTimeString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return time.format(formatter);
-    }
-    
-    public void setTime(LocalDateTime time) {
-        this.time = time;
     }
     public double getConf() {
         return conf;
-    }
-
-    public void setConf(double conf) {
-        this.conf = conf;
-    }
-
-    public double getRate() {
-        return rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
     }
 
     /**

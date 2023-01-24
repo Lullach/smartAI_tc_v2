@@ -2,7 +2,6 @@ package org.example;
 
 import ImageAnalysis.ImageJClass;
 import calc.GrowthContainer;
-import ImageAnalysis.*;
 import calc.*;
 
 import javafx.beans.value.ObservableValue;
@@ -10,13 +9,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -27,7 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InputValuesController{
-    private static Scene scene;
+    /**
+     * Controller for the Input Values Site
+     */
     private static Stage stage;
 
     @FXML
@@ -50,19 +50,24 @@ public class InputValuesController{
     @FXML
     private TableColumn<Row, String> time;
 
-    private ObservableList<Row> listRows = FXCollections.observableArrayList();
-    private ObservableList<Row> selectedRows = FXCollections.observableArrayList();
-    private Map<Row, Measurement> rowMeasurementMap = new HashMap<>();
-    // Use this controller to call methods in temperatureController
-    private TemperatureController temperatureController;
-    // Use this controller to call methods in monitoringController
-    private MonitoringController monitoringController;
+    private final ObservableList<Row> listRows = FXCollections.observableArrayList();
+    private final ObservableList<Row> selectedRows = FXCollections.observableArrayList();
+    private final Map<Row, Measurement> rowMeasurementMap = new HashMap<>();
+
+    /**
+     * Closes the Dialog to upload a new photo
+     */
     public static void discardNewPhotoDialog() {
         stage.close();
     }
 
+    /**
+     * When start Button is clicked, the Method checks if 3 pictures uploaded
+     * If yes, starts prediction
+     * Otherwise, show alert
+     */
     @FXML
-    void startMeasurement(MouseEvent event) {
+    void startMeasurement() {
         // Todo: starte prediction hier!
         // Property Change support changes
         if(listRows.size() < 3) {
@@ -77,20 +82,30 @@ public class InputValuesController{
         }
 
     }
+
+    /**
+     * When the add button is clicked, a new dialog to upload the picture is loaded
+     * @throws IOException on loading the fxml
+     */
     @FXML
-    void openDialogPane(MouseEvent event) throws IOException {
+    void openDialogPane() throws IOException {
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource( "newPhoto.fxml"));
-        scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load());
         NewPhotoController npc = fxmlLoader.getController();
         npc.setInputValuesController(this);
         stage.setTitle("Upload Picture");
-        stage.setScene(this.scene);
+        stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * If the delete button is pressed, removes all pictures in table,
+     * that are contained in selected rows list
+     */
     @FXML
-    void deletePictures(MouseEvent event) {
+    void deletePictures() {
         GrowthContainer container = GrowthContainer.instance();
         Measurement measurement;
         for(Row row : selectedRows) {
@@ -104,16 +119,12 @@ public class InputValuesController{
         table.getItems().clear();
         table.getItems().addAll(listRows);
     }
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
 
     /**
-     * Right now when you input a file, we adjust the time for testing
-     * @param filename
-     * @param file
-     * @param time
+     * Called from the NewPhotoController to add picture to the table
+     * @param filename  of photo
+     * @param file photofile
+     * @param time of the photo
      */
     public void initializeTable(String filename, File file, LocalDateTime time) {
         System.out.println("Inside initialize Table");
@@ -122,9 +133,7 @@ public class InputValuesController{
         Image image = new Image(file.toURI().toString(), 50, 50, false, false);
         iv.setImage(image);
         Row row = new Row(filename, time, iv, cb);
-        cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
-            selectedRow(row);
-        });
+        cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> selectedRow(row));
         listRows.add(row);
         if(listRows.size() > 2) {
             addButton.setDisable(true);
@@ -138,14 +147,25 @@ public class InputValuesController{
         container.addMeasure(measure,true);
         stage.close();
     }
+
+    /**
+     * Called when Controller is loaded
+     * Initializes the Table
+     */
     public void initialize(){
-        action.setCellValueFactory(new PropertyValueFactory<Row, String>("action"));
-        filename.setCellValueFactory(new PropertyValueFactory<Row, String>("filename"));
-        picture.setCellValueFactory(new PropertyValueFactory<Row, String>("picture"));
-        time.setCellValueFactory(new PropertyValueFactory<Row, String>("time"));
+        action.setCellValueFactory(new PropertyValueFactory<>("action"));
+        filename.setCellValueFactory(new PropertyValueFactory<>("filename"));
+        picture.setCellValueFactory(new PropertyValueFactory<>("picture"));
+        time.setCellValueFactory(new PropertyValueFactory<>("time"));
         table.getItems().addAll(listRows);
         table.setPlaceholder(new Label("No content added"));
     }
+
+    /**
+     * When user selects or unselects a checkbox in the table
+     * Adds or delets respective row from selectedRows Variable
+     * @param row where checkbox is used
+     */
     private void selectedRow(Row row) {
         if(selectedRows.contains(row)) {
             selectedRows.remove(row);
@@ -153,9 +173,5 @@ public class InputValuesController{
             selectedRows.add(row);
         }
         System.out.println(selectedRows);
-    }
-    public void setController(TemperatureController tc, MonitoringController mc) {
-        temperatureController = tc;
-        monitoringController = mc;
     }
 }
